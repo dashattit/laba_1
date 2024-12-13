@@ -15,10 +15,12 @@
     <header class="warning d-flex align-items-center">
         <div class="container">
             <nav class="d-flex justify-content-between">
-                <a href="{% url 'index' %}">Design.pro</a>
                 <a href="{% url 'index' %}">Главная</a>
                 {% if user.is_authenticated %}
-                <a href="{% url 'profile' %}">Профиль</a>
+                <div class="profile">
+                    <img src="{{ user.avatar.url }}" class="avatars" style="width: 25px; height: 25px; margin-right: 5px; object-fit: cover; border-radius: 50%;">
+                    <a href="{% url 'profile' %}">Профиль</a>
+                </div>
                 <a href="{% url 'logout' %}">Выйти</a>
                 {% else %}
                 <a href="{% url 'login' %}">Войти</a>

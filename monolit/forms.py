@@ -50,6 +50,12 @@ class AddUserCreatingForm(forms.ModelForm):
     password = forms.CharField(label="Пароль", widget=forms.PasswordInput)
     password_confirm = forms.CharField(label="Подтвердите пароль", widget=forms.PasswordInput)
 
+    avatar = forms.ImageField(
+        label="Аватар",
+        required=True,
+        error_messages={'required': "Пожалуйста, загрузите изображение аватара."}
+    )
+
     def clean(self):
         cleaned_data = super().clean()
         password = cleaned_data.get("password")
@@ -67,7 +73,7 @@ class AddUserCreatingForm(forms.ModelForm):
 
     class Meta:
         model = AddUser
-        fields = ("username", "email", "first_name", "last_name", "patronym", "password", "password_confirm")
+        fields = ("username", "email", "first_name", "last_name", "patronym", "password", "password_confirm", "avatar")
 
 
 class AddUserLoginForm(forms.Form):

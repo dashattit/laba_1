@@ -7,4 +7,10 @@
 <p>Имя пользователя: {{ user.username }}</p>
 <p>Ваше ФИО: {{ user.last_name }} {{ user.first_name }} {{ user.patronym }}</p>
 <p>Ваша почта: {{ user.email }}</p>
+{% if user.avatar %}
+    <img src="{{ user.avatar.url }}" alt="Аватар" style="width: 300px; height: auto;">
+{% else %}
+    <p>Аватар не установлен.</p>
+{% endif %}
+        <br><br><button class="btn btn-primary" type="submit">Редактировать</button>
 {% endblock%}

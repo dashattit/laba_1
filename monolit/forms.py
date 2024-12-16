@@ -2,7 +2,7 @@ from django import forms
 from .models import AddUser
 from django.core.validators import RegexValidator, EmailValidator
 
-
+# форма для регистрации
 class AddUserCreatingForm(forms.ModelForm):
     username = forms.CharField(
         label="Имя пользователя",
@@ -50,11 +50,8 @@ class AddUserCreatingForm(forms.ModelForm):
     password = forms.CharField(label="Пароль", widget=forms.PasswordInput)
     password_confirm = forms.CharField(label="Подтвердите пароль", widget=forms.PasswordInput)
 
-    avatar = forms.ImageField(
-        label="Аватар",
-        required=True,
-        error_messages={'required': "Пожалуйста, загрузите изображение аватара."}
-    )
+    # поле для загрузки аватарки
+    avatar = forms.ImageField(label="Аватар", required=True, error_messages={'required': "Пожалуйста, загрузите изображение аватара."})
 
     def clean(self):
         cleaned_data = super().clean()
@@ -75,11 +72,17 @@ class AddUserCreatingForm(forms.ModelForm):
         model = AddUser
         fields = ("username", "email", "first_name", "last_name", "patronym", "password", "password_confirm", "avatar")
 
-
+# форма для входа
 class AddUserLoginForm(forms.Form):
-    username = forms.CharField(
-        label="Логин",
-        max_length=100,
-        widget=forms.TextInput()
-    )
+    username = forms.CharField(label="Логин", max_length=100, widget=forms.TextInput())
     password = forms.CharField(label="Пароль", widget=forms.PasswordInput)
+
+# форма для редактирования профиля
+class UserProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = AddUser
+        fields = ("first_name", "last_name", "patronym", "email", "avatar")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['avatar'].required = True  # сделаем аватар обязательным

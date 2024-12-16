@@ -8,9 +8,14 @@
 <p>Ваше ФИО: {{ user.last_name }} {{ user.first_name }} {{ user.patronym }}</p>
 <p>Ваша почта: {{ user.email }}</p>
 {% if user.avatar %}
-    <img src="{{ user.avatar.url }}" alt="Аватар" style="width: 300px; height: auto;">
+    <img src="{{ user.avatar.url }}" alt="Аватар" style="width: 250px; height: auto;">
 {% else %}
     <p>Аватар не установлен.</p>
 {% endif %}
-        <br><br><button class="btn btn-primary" type="submit">Редактировать</button>
+    <br><br><a href="{% url 'edit_profile' %}" class="btn btn-primary">Редактировать</a>
+
+    <form action="{% url 'delete_profile' %}" method="post" style="display:inline;">
+         {% csrf_token %}
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите удалить свой профиль? Это действие необратимо.');">Удалить профиль</button>
+    </form>
 {% endblock%}

@@ -1,11 +1,13 @@
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.context_processors import request
 from django.urls import reverse_lazy
-from .forms import AddUserCreatingForm, AddUserLoginForm
+from .forms import AddUserCreatingForm, AddUserLoginForm, UserProfileEditForm
 from .models import AddUser
 from django.views import generic
 from django.views.generic.edit import FormView
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 def index(request):
     return render(request, 'index.html')
@@ -31,7 +33,7 @@ class Login(FormView):
             return super().form_valid(form)
         else:
             form.add_error(None, "Неверное имя пользователя или пароль.")
-            return self.form_invalid(form)  # Возвращаем форму с ошибками
+            return self.form_invalid(form)  # возвращаем форму с ошибками
 
 
 class UserProfileListView(generic.ListView):
@@ -52,3 +54,20 @@ def create_user(request):
     else:
         form = AddUserCreatingForm()
     return render(request, 'catalog/register.html', {'form': form})
+
+@method_decorator(login_required, name='dispatch')
+class UserProfileEditView(generic.UpdateView):
+    model = AddUser
+    form_class = UserProfileEditForm
+    template_name = 'catalog/edit_profile.html'
+    success_url = reverse_lazy('profile')
+
+    def get_object(self):
+        return self.request.user  # получаем текущего пользователя
+
+@login_required
+def delete_user(request):
+    user = request.user
+    user.delete() # удаляем профиль пользователя
+    return redirect('index') # перенаправление на главную страницу после удаления
+

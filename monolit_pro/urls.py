@@ -23,4 +23,5 @@ urlpatterns = [
     path('catalog/', include('monolit.urls')),
     path('', RedirectView.as_view(url='/catalog/', permanent=True)),
 ]
+# обработка медиа файлов
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
